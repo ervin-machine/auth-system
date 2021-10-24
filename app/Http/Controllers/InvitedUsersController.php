@@ -6,14 +6,9 @@ use Illuminate\Http\Request;
 use Auth;
 use App\User;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Foundation\Auth\RegistersUsers;
-
-use Jrean\UserVerification\Traits\VerifiesUsers;
-use Jrean\UserVerification\Facades\UserVerification;
+use App\Models\InvitedUsers;
 class InvitedUsersController extends Controller
 {
-    use RegistersUsers;
-    use VerifiesUsers;
 
     public function __construct()
     {
@@ -32,8 +27,8 @@ class InvitedUsersController extends Controller
         $invite->linktoken = $request->linktoken;
         $invite->email = $request->email;
         $invite.save();
-        #return response()->json(['message'=>'Invite sent'], 200);
-        return redirect('/invite/registration');
+        return response()->json(['message'=>'Invite sent'], 200);
+        #return redirect('/invite/registration');
     }
     public function registration(Request $request)
     {
@@ -54,8 +49,6 @@ class InvitedUsersController extends Controller
         $registration->password = $request->password;
         $registration->user_role = $request->user_role;
         $registration->save();
-        UserVerification::generate($registration);
-        UserVerification::send($registration, 'Verify email');
         return redirect('/login');
         #return response()->json(['message'=>'Registration']);
     }
